@@ -1,0 +1,731 @@
+{
+  "conformance_version": "0.1",
+  "title": "AI4 Proof Binding Conformance Suite",
+  "protocol_ref": {
+    "protocol": "AI4 Proof Binding",
+    "version": "0.1"
+  },
+  "frozen_reference": {
+    "ai4.proof": "https://www.thesingulant.ai/proof/manifests/architect-ai4.json",
+    "ai4.proof.sha256": "0d8e6572588523f262ed45598e72835f791922d9d18df0705702185a616c6fae",
+    "name": "architect.ai4",
+    "owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+    "fixture": "fixtures/valid-full-binding.json",
+    "note": "Local byte-identical copy of frozen production manifest; suite runs offline with simulated HTTP."
+  },
+  "rules": [
+    "Deterministic: no live network for the suite itself.",
+    "No dynamic timestamps or randomness.",
+    "Digests are SHA-256 of exact fixture bytes only.",
+    "Integrity/domain binding is not truth or trust.",
+    "Transport policy rejections map to status unavailable in current protocol."
+  ],
+  "vectors": [
+    {
+      "id": "VALID_FULL_BINDING",
+      "description": "Complete ai4.proof + digest, frozen production-identical manifest, subject/issuer/owner bind.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://www.thesingulant.ai/proof/manifests/architect-ai4.json",
+        "ai4.proof.sha256": "0d8e6572588523f262ed45598e72835f791922d9d18df0705702185a616c6fae"
+      },
+      "fixture": "fixtures/valid-full-binding.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/valid-full-binding.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "verified"
+      }
+    },
+    {
+      "id": "NO_RECORDS",
+      "description": "Neither ai4.proof nor ai4.proof.sha256 present.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {},
+      "fixture": null,
+      "http": null,
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "ONLY_AI4_PROOF",
+      "description": "Only ai4.proof present; digest record missing.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://www.thesingulant.ai/proof/manifests/architect-ai4.json"
+      },
+      "fixture": null,
+      "http": null,
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "ONLY_AI4_PROOF_SHA256",
+      "description": "Only ai4.proof.sha256 present; URI record missing.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof.sha256": "0d8e6572588523f262ed45598e72835f791922d9d18df0705702185a616c6fae"
+      },
+      "fixture": null,
+      "http": null,
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "INVALID_PROOF_URI_HTTP",
+      "description": "ai4.proof uses http (not https).",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "http://www.thesingulant.ai/proof/manifests/architect-ai4.json",
+        "ai4.proof.sha256": "0d8e6572588523f262ed45598e72835f791922d9d18df0705702185a616c6fae"
+      },
+      "fixture": null,
+      "http": null,
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "INVALID_DIGEST_FORMAT_UPPERCASE",
+      "category": "INVALID_DIGEST_FORMAT",
+      "description": "Digest uses uppercase hex.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://www.thesingulant.ai/proof/manifests/architect-ai4.json",
+        "ai4.proof.sha256": "0D8E6572588523F262ED45598E72835F791922D9D18DF0705702185A616C6FAE"
+      },
+      "fixture": null,
+      "http": null,
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "INVALID_DIGEST_FORMAT_0X_PREFIX",
+      "category": "INVALID_DIGEST_FORMAT",
+      "description": "Digest has 0x prefix.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://www.thesingulant.ai/proof/manifests/architect-ai4.json",
+        "ai4.proof.sha256": "0x0d8e6572588523f262ed45598e72835f791922d9d18df0705702185a616c6fae"
+      },
+      "fixture": null,
+      "http": null,
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "INVALID_DIGEST_FORMAT_WRONG_LENGTH",
+      "category": "INVALID_DIGEST_FORMAT",
+      "description": "Digest length is 63 not 64.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://www.thesingulant.ai/proof/manifests/architect-ai4.json",
+        "ai4.proof.sha256": "0d8e6572588523f262ed45598e72835f791922d9d18df0705702185a616c6fa"
+      },
+      "fixture": null,
+      "http": null,
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "INVALID_DIGEST_FORMAT_NON_HEX",
+      "category": "INVALID_DIGEST_FORMAT",
+      "description": "Digest contains non-hex character.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://www.thesingulant.ai/proof/manifests/architect-ai4.json",
+        "ai4.proof.sha256": "gd8e6572588523f262ed45598e72835f791922d9d18df0705702185a616c6fae"
+      },
+      "fixture": null,
+      "http": null,
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "MANIFEST_DIGEST_MISMATCH",
+      "description": "Fetched bytes do not match declared ai4.proof.sha256.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/valid-compact.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "INVALID_JSON",
+      "description": "Digest matches bytes that are not valid JSON.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "3006f48812d0cfc4772f12ea48f7893392eba072506128c41e1325ef40baae41"
+      },
+      "fixture": "fixtures/invalid-json.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/invalid-json.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "UNSUPPORTED_SCHEMA_VERSION",
+      "description": "Manifest schema_version is not ai4.proof-manifest.v1.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "8e8cf8187b47b468c2d0f5d407f319533c575322a1b7ac96d7e9873576f78f05"
+      },
+      "fixture": "fixtures/unsupported-schema-version.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/unsupported-schema-version.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "unsupported"
+      }
+    },
+    {
+      "id": "SUBJECT_MISMATCH",
+      "description": "Manifest subject.name does not match resolved name.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "51cbce7d194a2b10a2cd66ee4eefa771bd94e5246c489a095d74fc8845888cf0"
+      },
+      "fixture": "fixtures/subject-mismatch.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/subject-mismatch.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "ISSUER_NAME_MISMATCH",
+      "description": "Manifest issuer.name does not match resolved name.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "63710ae432cbfc80782be25f38754ac4db33d5472e8cc60c11df92fe3b187552"
+      },
+      "fixture": "fixtures/issuer-name-mismatch.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/issuer-name-mismatch.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "ISSUER_OWNER_MISSING",
+      "description": "Integrity and name binding ok, but issuer.owner absent so domain owner binding is incomplete.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "d701875a99ca0ce757e14ea9df5a1c858b97912df4717494f2a301f1c186c5b9"
+      },
+      "fixture": "fixtures/issuer-owner-missing.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/issuer-owner-missing.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "declared"
+      }
+    },
+    {
+      "id": "ISSUER_OWNER_MISMATCH",
+      "description": "Manifest issuer.owner checksum differs from resolved UNS owner.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "2ea6a4a46621ba46e00ff00268effa5d1fc5e96f411542d676cf3c09afad89ef"
+      },
+      "fixture": "fixtures/issuer-owner-mismatch.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/issuer-owner-mismatch.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "EXTRA_SCHEMA_FIELDS",
+      "description": "Manifest includes disallowed top-level field (additionalProperties false).",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "c158b41715d66edbc2f9ec42a557a5a530914128b0893a6d447a01a9758a6ba9"
+      },
+      "fixture": "fixtures/extra-schema-fields.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/extra-schema-fields.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "INVALID_ISSUED_AT",
+      "description": "issued_at is Date.parse-compatible but not RFC3339 (missing timezone offset/Z).",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "c8ad8314d50ede1d630f606e51a8346b134bc35585ac580eb60010b30a03b4d5"
+      },
+      "fixture": "fixtures/invalid-issued-at.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/invalid-issued-at.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "REDIRECT_PUBLIC_TO_PUBLIC",
+      "description": "Public HTTPS redirect chain ends at public host; final bytes+digest match.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/start",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "redirect_chain": [
+          {
+            "url": "https://example.com/start",
+            "status": 302,
+            "headers": {
+              "location": "https://example.com/final"
+            },
+            "resolved_ip": "93.184.216.34"
+          },
+          {
+            "url": "https://example.com/final",
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "body_fixture": "fixtures/valid-compact.json",
+            "resolved_ip": "93.184.216.34"
+          }
+        ]
+      },
+      "expected": {
+        "status": "verified"
+      }
+    },
+    {
+      "id": "REDIRECT_TO_PRIVATE_IP",
+      "description": "Redirect target is private IP; current protocol rejects via transport policy and maps to unavailable.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/start",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "redirect_chain": [
+          {
+            "url": "https://example.com/start",
+            "status": 302,
+            "headers": {
+              "location": "https://127.0.0.1/secret"
+            },
+            "resolved_ip": "93.184.216.34"
+          }
+        ],
+        "notes": "Transport policy rejects the redirect target and maps that rejection to unavailable"
+      },
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "PRIVATE_IP_DIRECT_127_0_0_1",
+      "category": "PRIVATE_IP_DIRECT",
+      "description": "Direct HTTPS URI to private/special IP 127.0.0.1; rejected by transport policy as unavailable.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://127.0.0.1/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/valid-compact.json",
+        "resolved_ip": "127.0.0.1",
+        "notes": "Literal private IP in URI; transport policy rejects it before fetch."
+      },
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "PRIVATE_IP_DIRECT_10_0_0_1",
+      "category": "PRIVATE_IP_DIRECT",
+      "description": "Direct HTTPS URI to private/special IP 10.0.0.1; rejected by transport policy as unavailable.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://10.0.0.1/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/valid-compact.json",
+        "resolved_ip": "10.0.0.1",
+        "notes": "Literal private IP in URI; transport policy rejects it before fetch."
+      },
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "PRIVATE_IP_DIRECT_169_254_169_254",
+      "category": "PRIVATE_IP_DIRECT",
+      "description": "Direct HTTPS URI to private/special IP 169.254.169.254; rejected by transport policy as unavailable.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://169.254.169.254/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/valid-compact.json",
+        "resolved_ip": "169.254.169.254",
+        "notes": "Literal private IP in URI; transport policy rejects it before fetch."
+      },
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "PRIVATE_IP_DIRECT___1",
+      "category": "PRIVATE_IP_DIRECT",
+      "description": "Direct HTTPS URI to private/special IP ::1; rejected by transport policy as unavailable.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://[::1]/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/valid-compact.json",
+        "resolved_ip": "::1",
+        "notes": "Literal private IP in URI; transport policy rejects it before fetch."
+      },
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "PRIVATE_IP_DIRECT___ffff_7f00_1",
+      "category": "PRIVATE_IP_DIRECT",
+      "description": "Direct HTTPS URI to private/special IP ::ffff:7f00:1; rejected by transport policy as unavailable.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://[::ffff:7f00:1]/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/valid-compact.json",
+        "resolved_ip": "::ffff:7f00:1",
+        "notes": "Literal private IP in URI; transport policy rejects it before fetch."
+      },
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "RESPONSE_TOO_LARGE",
+      "description": "Response Content-Length exceeds 256 KiB max; transport rejects as unavailable.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/response-too-large.marker",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json",
+          "content-length": "262145"
+        },
+        "body_mode": "oversized",
+        "size_bytes": 262145,
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "WRONG_CONTENT_TYPE",
+      "description": "Content-Type is text/html / not-application/json; transport rejects as unavailable.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/wrong-content-type.html",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html"
+        },
+        "body_fixture": "fixtures/wrong-content-type.html",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "WRONG_CONTENT_TYPE_SPOOF",
+      "category": "WRONG_CONTENT_TYPE",
+      "description": "Content-Type is not-application/json; transport rejects as unavailable.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "not-application/json"
+        },
+        "body_fixture": "fixtures/valid-compact.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "unavailable"
+      }
+    },
+    {
+      "id": "JSON_CONTENT_TYPE_WITH_CHARSET",
+      "description": "application/json; charset=utf-8 is accepted; binding verifies.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body_fixture": "fixtures/valid-compact.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "verified"
+      }
+    },
+    {
+      "id": "PLUS_JSON_MEDIA_TYPE",
+      "description": "application/ai4+json (+json suffix) is accepted; binding verifies.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/valid-compact.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/ai4+json"
+        },
+        "body_fixture": "fixtures/valid-compact.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "verified"
+      }
+    },
+    {
+      "id": "BYTE_LEVEL_CHANGE",
+      "description": "Semantically equivalent JSON with different whitespace; digest of A must not validate body B.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7"
+      },
+      "fixture": "fixtures/byte-level-b.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/byte-level-b.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "related_fixtures": {
+        "digest_source": "fixtures/byte-level-a.json",
+        "fetched_body": "fixtures/byte-level-b.json",
+        "digest_a": "18ca63fc4fdef192e87c9522fbc0292c20af809f530607cd6639578adeb66ab7",
+        "digest_b": "0d8e6572588523f262ed45598e72835f791922d9d18df0705702185a616c6fae"
+      },
+      "expected": {
+        "status": "conflict"
+      }
+    },
+    {
+      "id": "OWNER_CASE_NORMALIZATION",
+      "description": "Issuer owner lowercase and resolved_owner mixed case; checksum normalization yields verified.",
+      "name": "architect.ai4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://example.com/manifest.json",
+        "ai4.proof.sha256": "f1edeb320752380f7dbfd665352adc9488c4ad2257c909ec005b58c6c7f6aa09"
+      },
+      "fixture": "fixtures/owner-case-normalization.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/owner-case-normalization.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "verified"
+      }
+    },
+    {
+      "id": "NAME_NORMALIZATION",
+      "description": "Resolved name Architect.AI4 normalizes to architect.ai4; does not broaden .ai4 syntax.",
+      "name": "Architect.AI4",
+      "resolved_owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D",
+      "records": {
+        "ai4.proof": "https://www.thesingulant.ai/proof/manifests/architect-ai4.json",
+        "ai4.proof.sha256": "0d8e6572588523f262ed45598e72835f791922d9d18df0705702185a616c6fae"
+      },
+      "fixture": "fixtures/valid-full-binding.json",
+      "http": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body_fixture": "fixtures/valid-full-binding.json",
+        "resolved_ip": "93.184.216.34"
+      },
+      "expected": {
+        "status": "verified"
+      }
+    }
+  ]
+}

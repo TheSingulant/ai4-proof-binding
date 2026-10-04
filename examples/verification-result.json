@@ -1,0 +1,31 @@
+{
+  "name": "architect.ai4",
+  "status": "verified",
+  "manifest": {
+    "schema_version": "ai4.proof-manifest.v1",
+    "subject": {
+      "name": "architect.ai4"
+    },
+    "issued_at": "2026-10-01T07:55:00Z",
+    "issuer": {
+      "type": "uns-name",
+      "name": "architect.ai4",
+      "owner": "0xA3Ac252805dbC452c232dFb2b5eEF7F3f274501D"
+    },
+    "artifact": {
+      "uri": "https://www.thesingulant.ai/proof/artifacts/architect-ai4-v1.json",
+      "sha256": "6a82795a091d5aa903cfacd063ea1250d2766a09450cfebe4e92099cf905cb29",
+      "media_type": "application/json"
+    }
+  },
+  "binding": {
+    "subject_name_match": true,
+    "issuer_type_ok": true,
+    "issuer_name_match": true,
+    "owner_match": true,
+    "owner_present": true
+  },
+  "notes": [
+    "Manifest integrity, subject, issuer name, and UNS owner binding verified. This is not a trust or truth judgment."
+  ]
+}
